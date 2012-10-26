@@ -1,0 +1,122 @@
+#!/bin/bash
+#	This is a script that runs the program on each of the test in the test suite as
+#	specified by the suite-file and reports tests that do not match the expected output.
+#	Using this good reference on bash: http://tldp.org/LDP/Bash-Beginners-Guide/html/
+#	Author:	Jason Sun 20387090
+#	Date:	Sept 24, 2012
+
+usage () {
+    echo "${0} [-q|--quiet] suite-file program"
+    exit 1
+}
+
+
+verboseCompare () {
+	`[ -e $cmd.out ]`
+	if [ $? != 0 ] ; then
+		echo "Test missing .out file: $cmd"
+		exit 2 #	missing/unreadable .in or .out
+	fi
+	`[ -e $cmd.in ]`
+	if [ $? != 0 ] ; then
+		echo "Test missing .in file: $cmd"
+		exit 2 #	missing/unreadable .in or .out
+	fi
+
+	`$2 < $cmd.in > $cmd.tst`
+	diff $cmd.tst $cmd.out > $cmd.diff #	diff file is to avoid output
+	if [ $? = 0 ] ; then
+		echo "Test passed: $cmd"
+		return 0
+	else
+		echo "Test failed: $cmd"
+		echo "Input:"
+		cat $cmd.in
+		echo "-"
+		echo "Expected:"
+		cat $cmd.out
+		echo "-"
+		echo "Actual:"
+		cat $cmd.tst
+		echo "-"
+		return 1
+	fi
+}
+
+quietCompare () {
+	echo $cmd
+	`[ -e $cmd.out ]`
+	if [ $? != 0 ] ; then
+		echo "Test missing .out file: $cmd"
+		exit 2 #	missing/unreadable .in or .out
+	fi
+	`[ -e $cmd.in ]`
+	if [ $? != 0 ] ; then
+		echo "Test missing .in file: $cmd"
+		exit 2 #	missing/unreadable .in or .out
+	fi
+
+
+	`$2 < $cmd.in > $cmd.tst`
+	diff $cmd.tst $cmd.out > $cmd.diff #	diff file is to avoid output
+	if [ $? = 0 ] ; then
+		echo "Test passed: $cmd"
+		return 0
+	else
+		echo "Test failed: $cmd"
+		return 1
+	fi
+}
+
+runTests () { # $1 suite-file_path, $2 program_path, $3 quietness
+	declare -i lines=`grep -c '[^[:space:]]' < $1`
+	declare -i i=0
+
+	if [ $3 = 1 ] ; then
+		compareMethod="quietCompare"
+	else
+		compareMethod="verboseCompare"
+	fi
+
+	while [ $i != $lines ]; do	# call runTest for all the filenames in suite-file
+		i=$i+1
+		cmd=`head -$i $1 | tail -1`
+		$compareMethod $cmd $2
+	done
+	rm *.tst *.diff
+	return 0
+}
+
+
+## MAIN ##
+
+if [ $# != 0 ] ; then
+	if [ ${#} = 2 ] ; then
+		runTests $1 $2 0 
+		# $1 (suite-file filepath) $2 (program path) $3 (quiet mode?)
+	elif [ $1 = "-q" ] || [ $1 = "--quiet" ]  ; then
+		shift 1
+		runTests $1 $2 1
+	fi
+else
+	if [ "$GEDIT_CURRENT_DOCUMENT_NAME" = "" ] ; then
+		usage
+	elif [ "$GEDIT_CURRENT_DOCUMENT_NAME" != "" ] ; then
+
+		if [ -e "$GEDIT_CURRENT_DOCUMENT_NAME.exe" ] ; then
+			cd "$GEDIT_CURRENT_DOCUMENT_DIR"
+			suiteFileName=`ls | grep "suite*" | head -1`
+			/home/jason/.cs246runcpp/runSuite "$suiteFileName" "./$GEDIT_CURRENT_DOCUMENT_NAME.exe"
+		else
+			echo "$GEDIT_CURRENT_DOCUMENT_NAME.exe not found"
+			exit 1 
+		fi
+		
+	fi
+
+fi
+
+
+
+
+

@@ -1,0 +1,45 @@
+#!/bin/bash
+#	This script compiles the .cpp file and executes it.
+#	Author:	Jason Sun 20387090
+#	Date:	Oct 9, 2012
+
+
+
+## set this to 1 to run program after compile
+declare -i execute=$1
+##
+
+
+rm -f $GEDIT_CURRENT_DOCUMENT_NAME.exe #	remove any existing executable
+
+echo $GEDIT_CURRENT_DOCUMENT_NAME | grep '[.]cpp$' > /dev/null
+
+if [ $? -ne 0 ] ; then
+	echo "Filename must end in .cpp"
+	exit 1
+fi
+
+#	VALGRIND
+VALGRIND=`which valgrind 2> /dev/null`
+VALGRIND="${VALGRIND} --leak-check=full --show-reachable=yes"
+GEDIT=`which gedit 2> /dev/null`
+GTERM=`which gnome-terminal 2> /dev/null`
+
+#	Compile
+dir=`pwd`
+echo "Compiling `pwd`/$GEDIT_CURRENT_DOCUMENT_NAME"
+g++ -o $GEDIT_CURRENT_DOCUMENT_NAME.exe $GEDIT_CURRENT_DOCUMENT_NAME
+if [ $? -ne 0 ] ; then
+	echo "Failed"
+	exit 1
+fi
+
+echo "$GEDIT_CURRENT_DOCUMENT_NAME.exe created"
+
+###	UNCOMMENT TO RUN AT COMPILE##
+if [ $execute = 1 ]; then 
+	$GTERM --disable-factory -t $GEDIT_CURRENT_DOCUMENT_NAME.interaction -e "/bin/bash -c './$GEDIT_CURRENT_DOCUMENT_NAME.exe; exec /bin/bash -i'"
+fi
+###
+
+exit 0

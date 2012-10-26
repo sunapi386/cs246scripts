@@ -1,0 +1,23 @@
+#!/bin/bash
+#	Use rsych to backup a couple of key directories
+#	bwbecker 2010-01-08
+#	Modified to include backups of cs246
+#	j53sun 2012-10-14
+
+
+useridFile=~/.myUserid
+
+if [ -f $useridFile ] ; then 
+	USERID=`cat $useridFile`
+else
+	echo -e "Enter your UW userid (eg: jsmith): "
+	read USERID
+	echo ${USERID:0:8} > $useridFile
+fi
+
+echo $USERID
+
+rsync -avhe "ssh -l ${USERID}" \ #archive, verbose, 
+	/home/jason/Desktop \
+	/home/cs136/Documents \
+	${USERID}@linux.student.cs.uwaterloo.ca:cs136VMBackups/
