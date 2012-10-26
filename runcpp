@@ -1,9 +1,9 @@
 #!/bin/bash
 #	This script compiles the .cpp file and executes it.
+#	Not meant to be run in a terminal environment.
+#	For execution in gedit script only.
 #	Author:	Jason Sun 20387090
 #	Date:	Oct 9, 2012
-
-
 
 ## set this to 1 to run program after compile
 declare -i execute=$1
@@ -13,22 +13,20 @@ declare -i execute=$1
 rm -f $GEDIT_CURRENT_DOCUMENT_NAME.exe #	remove any existing executable
 
 echo $GEDIT_CURRENT_DOCUMENT_NAME | grep '[.]cpp$' > /dev/null
-
 if [ $? -ne 0 ] ; then
 	echo "Filename must end in .cpp"
 	exit 1
 fi
 
-#	VALGRIND
-VALGRIND=`which valgrind 2> /dev/null`
-VALGRIND="${VALGRIND} --leak-check=full --show-reachable=yes"
+
 GEDIT=`which gedit 2> /dev/null`
 GTERM=`which gnome-terminal 2> /dev/null`
 
 #	Compile
 dir=`pwd`
 echo "Compiling `pwd`/$GEDIT_CURRENT_DOCUMENT_NAME"
-g++ -o $GEDIT_CURRENT_DOCUMENT_NAME.exe $GEDIT_CURRENT_DOCUMENT_NAME
+# old 	g++ -o $GEDIT_CURRENT_DOCUMENT_NAME.exe $GEDIT_CURRENT_DOCUMENT_NAME
+g++ -g -ansi -pedantic -Wall -o $GEDIT_CURRENT_DOCUMENT_NAME.exe $GEDIT_CURRENT_DOCUMENT_NAME
 if [ $? -ne 0 ] ; then
 	echo "Failed"
 	exit 1

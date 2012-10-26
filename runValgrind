@@ -1,7 +1,26 @@
 #!/bin/bash
-#	This .
+#	This script executes VALGRIND.
 #	Author:	Jason Sun 20387090
-#	Date:	Oct 9, 2012
+#	Date:	Oct 12, 2012
+
+name=$GEDIT_CURRENT_DOCUMENT_NAME
+dir=$GEDIT_CURRENT_DOCUMENT_DIR
+VALGRIND="`which valgrind` --track-origins=yes --leak-check=full --show-reachable=yes --quiet"
+GEDIT=`which gedit 2> /dev/null`
+GTERM="`which gnome-terminal 2> /dev/null` --disable-factory"
+declare -i is_cpp=`echo $name | grep '[.]cpp$' > /dev/null ; echo $?`
+declare -i exe_present=`[ -x "$name.exe" ] ; echo $?`
+
+if [ "$VALGRIND" = "" ] ; then
+	echo "Must install VALGRIND first"
+	exit 1
+elif [ $is_cpp != 0 ] ; then
+	echo "Filename must end in .cpp"
+	exit 2
+elif [ $exe_present != 0 ] ; then
+	echo "Must compile $name.exe first"
+	exit 3
+fi
 
 
-
+$GTERM -t $name.interaction -e "/bin/bash -c '$VALGRIND ./$name.exe; exec /bin/bash -i'"
