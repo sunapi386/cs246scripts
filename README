@@ -16,7 +16,10 @@ Add the code that is in Manage_External_Tools.txt
 Then:
 mkdir ~/.cs246scripts
 
-and put all the files from this repo there
+And now, put all the files there. 
+Remember to "chmod +x <script_filename>", otherwise when you run a script you'll see "permission denied".
+Eg: chmod +x runSuite
+
 
 
 Contact Me:
