@@ -1,0 +1,27 @@
+Title:
+RunC++: automate c++ code testing scripts
+
+Description:
+Remember how easy it was to compile, test, and debug c code in CS136 class?
+Just hit CTRL + R and the scripts does everything for you. In this course, the difference is this time we use c++. With a little bit of work, we could rewrite the runC script (from cs136 virtual machine) so that it now does c++.
+Ok, so basically this folder contains scripts that were used in my cs246 class. These are bash script codes. They helped me test code faster.
+
+
+Installation:
+There is a script that gedit runs. Fire up gedit and go to:
+Tools -> Manage External Tools
+Add the code that is in Manage_External_Tools.txt
+(Refer to Manage_External_Tools.jpg to setup gedit box)
+
+Then:
+mkdir ~/.cs246scripts
+
+And now, put all the files there. 
+Remember to "chmod +x <script_filename>", otherwise when you run a script you'll see "permission denied".
+Eg: chmod +x runSuite
+
+
+
+Contact Me:
+sunapi386@gmail.com
+
