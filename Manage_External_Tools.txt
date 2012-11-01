@@ -1,18 +1,18 @@
-#	runC++
+###############	runC++	 ###############
 
 #!/bin/sh
 EHOME=`echo $HOME | sed "s/#/\#/"`
 DIR=$GEDIT_CURRENT_DOCUMENT_DIR
 ${HOME}/.cs246runcpp/runcpp 1 #1 == executes
 
-#	runC++ noexec
+###############	runC++ noexec	###############
 
 #!/bin/sh
 EHOME=`echo $HOME | sed "s/#/\#/"`
 DIR=$GEDIT_CURRENT_DOCUMENT_DIR
 ${HOME}/.cs246runcpp/runcpp
 
-#	runHelp
+###############	runHelp	###############
 
 #!/bin/sh
 echo "Alt + Shift:"
@@ -23,22 +23,22 @@ echo "	Gnome-terminal"
 echo "	Test"
 echo "	Valgrind"
 
-#	runNautilus
+###############	runNautilus	###############
 
 #!/bin/sh
 nautilus "$GEDIT_CURRENT_DOCUMENT_DIR"
 
-#	runSuite
+###############	runSuite	###############
 
 #!/bin/sh
 `echo $HOME | sed "s/#/\#/"`/.cs246runcpp/runSuite
 
-#	runTermHere
+###############	runTermHere	###############
 
 #!/bin/sh
 gnome-terminal --working-directory="$GEDIT_CURRENT_DOCUMENT_DIR" &
 
-#	runValgrind
+###############	runValgrind	###############
 
 #!/bin/sh
 EHOME=`echo $HOME | sed "s/#/\#/"`

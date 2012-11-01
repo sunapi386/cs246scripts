@@ -8,18 +8,42 @@ Ok, so basically this folder contains scripts that were used in my cs246 class. 
 
 
 Installation:
-There is a script that gedit runs. Fire up gedit and go to:
-Tools -> Manage External Tools
-Add the code that is in Manage_External_Tools.txt
-(Refer to Manage_External_Tools.jpg to setup gedit box)
 
-Then:
 mkdir ~/.cs246scripts
-
 And now, put all the files there. 
 Remember to "chmod +x <script_filename>", otherwise when you run a script you'll see "permission denied".
 Eg: chmod +x runSuite
 
+Fire up gedit and go to: Tools -> Manage External Tools
+Click the "+" button to make a new script.
+Add the code that is in Manage_External_Tools.txt: 
+
+For example:
+If we were to add runSuite, you would:
+1.	Click "+"
+2.	Copy and paste the lines between "###############" into the new script
+EG:
+
+###############	runSuite	###############
+#!/bin/sh
+`echo $HOME | sed "s/#/\#/"`/.cs246runcpp/runSuite
+
+3. Set up the shortcut key according to the runHelp (or make your own):
+
+###############	runHelp	###############
+#!/bin/sh
+echo "Alt + Shift:"
+echo "	Execute"
+echo "	Compile"
+echo "	Browse"
+echo "	Gnome-terminal"
+echo "	Test"
+echo "	Valgrind"
+
+4.	Repeat until you have added all the scripts, and you have something that looks like the screenshot: 
+Manage_External_Tools.jpg
+
+5. Finished.
 
 
 Contact Me:
